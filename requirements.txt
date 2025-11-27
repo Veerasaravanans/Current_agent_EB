@@ -1,0 +1,62 @@
+# Automotive AI Agent - Enhanced Dependencies with LangChain & RAG
+
+# ==================================================================================
+# CORE AI & VISION
+# ==================================================================================
+ollama>=0.1.6
+Pillow>=10.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+adb-shell>=0.4.4
+
+# OCR - PRIMARY coordinate detection method
+easyocr>=1.7.0
+paddleocr>=2.7.0
+pytesseract>=0.3.10
+
+# Excel/PDF Support
+PyPDF2>=3.0.0
+openpyxl>=3.1.0
+pandas>=2.0.0
+xlsxwriter>=3.1.0
+
+# GUI & Voice
+PyQt6>=6.5.0
+pyttsx3>=2.90
+SpeechRecognition>=3.10.0
+pyaudio>=0.2.13
+
+# Utilities
+python-dotenv>=1.0.0
+prompt-toolkit>=3.0.0
+tqdm>=4.66.0
+colorama>=0.4.6
+scikit-image>=0.21.0
+torch>=2.0.0
+
+# ==================================================================================
+# NEW: LANGCHAIN ECOSYSTEM
+# ==================================================================================
+langchain>=0.1.0
+langchain-core>=0.1.0
+langchain-community>=0.0.10
+langchain-ollama>=0.0.1
+langgraph>=0.0.20
+
+# ==================================================================================
+# NEW: EMBEDDINGS & VECTOR DATABASE
+# ==================================================================================
+sentence-transformers>=2.2.2
+chromadb>=0.4.22
+
+# ==================================================================================
+# NEW: STRUCTURED OUTPUT & NLP
+# ==================================================================================
+pydantic>=2.5.0
+jsonschema>=4.20.0
+transformers>=4.30.0
+huggingface-hub>=0.19.0
+typing-extensions>=4.8.0
+loguru>=0.7.2
+pyyaml>=6.0
+requests>=2.31.0

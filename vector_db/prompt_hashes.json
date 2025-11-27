@@ -1,0 +1,9 @@
+{
+  "prompts\\base_prompts.md": "dc7c70bd75e2a924c57d6c657e107925",
+  "prompts\\custom_commands.md": "2b753e15ca3d096f66c589a8a040cdf4",
+  "prompts\\error_handling.md": "b46cfa52c9a5e7e70231495e9a19746c",
+  "prompts\\learned_solutions.md": "d331e4665823f41001a9731f4926882d",
+  "prompts\\component_specific\\hvac.md": "f7894460b573d2ea9907ba5b0a6eb428",
+  "prompts\\component_specific\\media.md": "a7d85d4978dbb70a67a17addb1461550",
+  "prompts\\component_specific\\navigation.md": "c6dff7ca79e5b763371672c2da9ff8e0"
+}

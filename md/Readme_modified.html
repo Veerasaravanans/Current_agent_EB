@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural AI Agent - Scriptless Automotive Testing Framework</title>
+    
+    <!-- Mermaid JS for Flowcharts -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .subtitle {
+            font-size: 1.5em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        
+        .header .version {
+            margin-top: 20px;
+            font-size: 1.1em;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 25px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            position: relative;
+        }
+        
+        .section-title:before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: #764ba2;
+        }
+        
+        .subsection {
+            margin: 30px 0;
+        }
+        
+        .subsection-title {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin-bottom: 15px;
+        }
+        
+        .goal-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .goal-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+        
+        .goal-card p {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        .goal-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .goal-list li {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        
+        .goal-list li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .goal-list li strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tech-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+        
+        .tech-card h4 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tech-card .icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+        
+        .tech-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tech-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .tech-card ul li:before {
+            content: "→";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .flowchart-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .flowchart-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .mermaid {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .specs-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .specs-table th {
+            padding: 20px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+        
+        .specs-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .specs-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .specs-table .category {
+            font-weight: bold;
+            color: #667eea;
+            width: 25%;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .recommended {
+            background: #d4edda;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #155724;
+            font-weight: bold;
+        }
+        
+        .laptop-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .laptop-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .laptop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+        
+        .laptop-card h4 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+        
+        .laptop-card .price {
+            font-size: 1.3em;
+            color: #764ba2;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .laptop-card ul {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .laptop-card ul li {
+            padding: 8px 0;
+            font-size: 0.95em;
+        }
+        
+        .laptop-card ul li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .advantage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .advantage-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .advantage-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .advantage-card h4 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .advantage-card .icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+        
+        .advantage-card p {
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table thead {
+            background: #667eea;
+            color: white;
+        }
+        
+        .comparison-table th {
+            padding: 20px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+        
+        .comparison-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .comparison-table .manual {
+            background: #ffebee;
+        }
+        
+        .comparison-table .ai-agent {
+            background: #e8f5e9;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .footer p {
+            margin: 10px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .tech-grid,
+            .laptop-cards,
+            .advantage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 Neural AI Agent</h1>
+            <div class="subtitle">AI Powered Test Automation Framework</div>
+            <div class="version">Version 1.0 | RAG + LangChain + LangGraph Enhanced</div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            
+            <!-- Section 1: Goals -->
+            <section class="section" id="goals">
+                <h2 class="section-title">🎯 Project Goals</h2>
+                
+                <div class="goal-card">
+                    <h3>🚀 Primary Goal</h3>
+                    <p><strong>AI-powered test automation framework which can generate codeless automated test cases</strong> for automotive infotainment displays, eliminating the need for script writing, maintenance, and enabling autonomous test execution through natural language understanding and computer vision.</p>
+                </div>
+                
+                <ul class="goal-list">
+                    <li>
+                        <strong>Low Maintenance</strong>
+                        Reduced maintenance due to zero code in automated test cases. The AI agent adapts to UI changes automatically using computer vision and natural language understanding, eliminating the need to write, update, or maintain test scripts.
+                    </li>
+                    
+                    <li>
+                        <strong>Natural Language Test Cases</strong>
+                        Test engineers write test cases in plain English in Excel. No programming knowledge required. Example: "Turn on AC and set temperature to 72°F"
+                    </li>
+                    
+                    <li>
+                        <strong>Self-Learning Intelligence</strong>
+                        Agent learns from every test execution. Failed scenarios become learned solutions. Knowledge base grows exponentially with usage.
+                    </li>
+                    
+                    <li>
+                        <strong>Human-in-the-Loop</strong>
+                        When AI encounters unsolvable scenarios (attempt 10), it requests human guidance via voice or GUI. Architect provides solution, agent learns it permanently.
+                    </li>
+                    
+                    <li>
+                        <strong>Comprehensive Reporting</strong>
+                        Auto-generate Excel reports with screenshots, pass/fail verdicts, execution times, and AI reasoning for each step.
+                    </li>
+                    
+                    <li>
+                        <strong>Cost Reduction</strong>
+                        Reduced maintenance and development cost due to zero code. No time spent on writing, debugging, or updating test scripts.
+                    </li>
+                </ul>
+            </section>
+            
+            <!-- Section 2: Technologies & Tech Stack -->
+            <section class="section" id="technologies">
+                <h2 class="section-title">🛠️ Technologies & Tech Stack</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">🌟 Revolutionary AI-Agent Technologies (New to Testing Field)</h3>
+                    <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
+                        This framework introduces <strong>cutting-edge AI/ML technologies</strong> previously unused in automotive testing. The integration of <strong>RAG (Retrieval-Augmented Generation)</strong> and the <strong>LangChain ecosystem</strong> represents a paradigm shift in test automation, enabling intelligent, adaptive, and codeless test case generation and execution.
+                    </p>
+                </div>
+                
+                <div class="tech-grid">
+                    <div class="tech-card" style="border: 3px solid #667eea; background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);">
+                        <h4><span class="icon">🤖</span> AI/ML Core ⭐ NEW</h4>
+                        <ul>
+                            <li><strong>LLaMA 3.1 (13B)</strong> - Primary reasoning engine</li>
+                            <li><strong>Moondream2</strong> - Vision AI for screenshot analysis</li>
+                            <li><strong>Ollama</strong> - Local LLM inference server</li>
+                            <li><strong>PyTorch</strong> - Deep learning framework</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-card" style="border: 3px solid #ff6b6b; background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);">
+                        <h4><span class="icon">🧠</span> RAG System ⭐ NEW</h4>
+                        <ul>
+                            <li><strong>Sentence Transformers</strong> - Text embeddings (all-MiniLM-L6-v2)</li>
+                            <li><strong>ChromaDB</strong> - Vector database for semantic search</li>
+                            <li><strong>FAISS</strong> - Vector similarity search</li>
+                            <li><strong>Semantic Chunking</strong> - Intelligent prompt splitting</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-card" style="border: 3px solid #4ecdc4; background: linear-gradient(135deg, #f0fffe 0%, #e0fcfa 100%);">
+                        <h4><span class="icon">🔗</span> LangChain Ecosystem ⭐ NEW</h4>
+                        <ul>
+                            <li><strong>LangChain Core</strong> - LLM orchestration</li>
+                            <li><strong>LangChain Ollama</strong> - Local model integration</li>
+                            <li><strong>LangGraph</strong> - Multi-step workflow state machine</li>
+                            <li><strong>Pydantic</strong> - Structured output validation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <h4><span class="icon">👁️</span> Computer Vision</h4>
+                        <ul>
+                            <li><strong>EasyOCR</strong> - Text detection (primary)</li>
+                            <li><strong>PaddleOCR</strong> - Chinese/multilingual text</li>
+                            <li><strong>OpenCV</strong> - Template matching & image processing</li>
+                            <li><strong>Tesseract</strong> - Fallback OCR engine</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <h4><span class="icon">📱</span> Device Control</h4>
+                        <ul>
+                            <li><strong>ADB (Android Debug Bridge)</strong> - Device automation</li>
+                            <li><strong>Python Subprocess</strong> - Command execution</li>
+                            <li><strong>Screen Capture API</strong> - Real-time screenshots</li>
+                            <li><strong>Input Event Injection</strong> - Touch simulation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <h4><span class="icon">🖥️</span> GUI & Interface</h4>
+                        <ul>
+                            <li><strong>PyQt6</strong> - Desktop GUI framework</li>
+                            <li><strong>pyttsx3</strong> - Text-to-Speech (TTS)</li>
+                            <li><strong>SpeechRecognition</strong> - Speech-to-Text (STT)</li>
+                            <li><strong>PyAudio</strong> - Audio I/O</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <h4><span class="icon">📊</span> Data & Reporting</h4>
+                        <ul>
+                            <li><strong>Pandas</strong> - Excel/CSV processing</li>
+                            <li><strong>OpenPyXL</strong> - Excel report generation</li>
+                            <li><strong>XlsxWriter</strong> - Advanced Excel formatting</li>
+                            <li><strong>Pillow (PIL)</strong> - Image manipulation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <h4><span class="icon">⚙️</span> Core Python</h4>
+                        <ul>
+                            <li><strong>Python 3.8+</strong> - Programming language</li>
+                            <li><strong>AsyncIO</strong> - Asynchronous operations</li>
+                            <li><strong>Threading</strong> - Parallel execution</li>
+                            <li><strong>Logging</strong> - Comprehensive logging</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 3: Process Flow -->
+            <section class="section" id="flowchart">
+                <h2 class="section-title">🔄 Framework Process Flow</h2>
+                
+                <div class="flowchart-container" style="background: #f8f9fa; padding: 40px; border-radius: 15px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);">
+                    <div class="mermaid" style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+graph TB
+    %% Top: Input Layer
+    Input["🖥️ INPUT AREA<br/>(GUI Interface)<br/>━━━━━━━━━━━━<br/>Test ID Entry<br/>Voice Commands<br/>Settings Control"]
+    
+    %% Center: AI Agent Framework
+    Agent["🤖 AI-AGENT FRAMEWORK<br/>(Core Intelligence)<br/>━━━━━━━━━━━━━━━━━━━<br/>• RAG System<br/>• LangChain Coordinator<br/>• LangGraph Workflow<br/>• Vision System (OCR/Template/AI)<br/>• Decision Engine<br/>• 10-Attempt Strategy"]
+    
+    %% Left: Server/Database
+    Server["📊 SERVER<br/>(Database)<br/>━━━━━━━━━━━━<br/>Test Case Storage<br/>Excel Sheets<br/>• HVAC Tests<br/>• Media Tests<br/>• Navigation Tests"]
+    
+    %% Right: LLM Model
+    LLM["🧠 LLM MODEL<br/>(Reasoning Engine)<br/>━━━━━━━━━━━━━━━━<br/>LLaMA 3.1 13B<br/>Moondream2<br/>Ollama Server<br/>━━━━━━━━━━━━━━━━<br/>• Natural Language<br/>• Vision Analysis<br/>• Decision Making"]
+    
+    %% Knowledge Base
+    Prompts["📚 PROMPTS<br/>(Knowledge Base & Learning)<br/>━━━━━━━━━━━━━━━━━━━━━<br/>Vector Database (ChromaDB)<br/>Embedded Prompts<br/>━━━━━━━━━━━━━━━━━━━━━<br/>• Base Instructions<br/>• Component Knowledge<br/>• Error Solutions<br/>• Learned Cases<br/>• RAG Retrieval"]
+    
+    %% Bottom: Output Layer
+    Output["📱 OUTPUT<br/>(Device Control)<br/>━━━━━━━━━━━━<br/>ADB Commands<br/>Screen Actions<br/>• Tap<br/>• Swipe<br/>• Input Text"]
+    
+    %% Report Generation
+    Report["📊 GENERATED REPORT & RESULTS<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>Excel Report with Screenshots<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>✅ Pass/Fail Verdicts<br/>📸 Step Screenshots<br/>⏱️ Execution Time<br/>🧠 AI Reasoning<br/>📈 Test Statistics"]
+    
+    %% Flow: Input to Agent
+    Input -->|"1. Test ID<br/>User Input"| Agent
+    
+    %% Flow: Server to Agent (bidirectional)
+    Server <-->|"2. Load Test Cases<br/>3. Test Steps<br/>━━━━━━━━<br/>4. Return Data"| Agent
+    
+    %% Flow: Agent to Prompts (bidirectional)
+    Agent <-->|"5. Query Context<br/>6. RAG Retrieval<br/>━━━━━━━━<br/>7. Relevant Knowledge<br/>8. Save Learned Solutions"| Prompts
+    
+    %% Flow: Agent to LLM (bidirectional)
+    Agent <-->|"9. Send Prompt + Screenshot<br/>10. Context + Query<br/>━━━━━━━━━━━━━━━<br/>11. AI Decision<br/>12. Action Plan<br/>13. Reasoning"| LLM
+    
+    %% Flow: Agent to Output
+    Agent -->|"14. Execute Action<br/>ADB Commands"| Output
+    
+    %% Flow: Output to Report
+    Output -->|"15. Capture Results<br/>Screenshots"| Report
+    
+    %% Flow: Report back to GUI
+    Report -->|"16. Display<br/>Results"| Input
+    
+    %% Styling
+    classDef inputStyle fill:#667eea,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
+    classDef serverStyle fill:#ff6b6b,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
+    classDef agentStyle fill:#4ecdc4,stroke:#333,stroke-width:4px,color:#000,font-weight:bold
+    classDef promptsStyle fill:#ffe66d,stroke:#333,stroke-width:3px,color:#000,font-weight:bold
+    classDef llmStyle fill:#95e1d3,stroke:#333,stroke-width:3px,color:#000,font-weight:bold
+    classDef outputStyle fill:#a8e6cf,stroke:#333,stroke-width:3px,color:#000,font-weight:bold
+    classDef reportStyle fill:#51cf66,stroke:#333,stroke-width:3px,color:#fff,font-weight:bold
+    
+    class Input inputStyle
+    class Server serverStyle
+    class Agent agentStyle
+    class Prompts promptsStyle
+    class LLM llmStyle
+    class Output outputStyle
+    class Report reportStyle
+                    </div>
+                </div>
+                
+                <div class="legend" style="margin-top: 30px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.3em;">📋 Component Details</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                        <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; background: #667eea; color: white;">🖥️</div>
+                            <div style="flex: 1;">
+                                <strong style="display: block; color: #333; margin-bottom: 3px;">Input Area (GUI)</strong>
+                                <small style="color: #666; font-size: 0.85em;">User interface for test execution control</small>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; background: #ff6b6b; color: white;">📊</div>
+                            <div style="flex: 1;">
+                                <strong style="display: block; color: #333; margin-bottom: 3px;">Server (Database)</strong>
+                                <small style="color: #666; font-size: 0.85em;">Test case storage in Excel sheets</small>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; background: #4ecdc4; color: white;">🤖</div>
+                            <div style="flex: 1;">
+                                <strong style="display: block; color: #333; margin-bottom: 3px;">AI-Agent Framework</strong>
+                                <small style="color: #666; font-size: 0.85em;">Central intelligence with RAG, LangChain, LangGraph</small>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; background: #ffe66d;">📚</div>
+                            <div style="flex: 1;">
+                                <strong style="display: block; color: #333; margin-bottom: 3px;">Prompts (Knowledge Base)</strong>
+                                <small style="color: #666; font-size: 0.85em;">Vector DB with embedded knowledge & learning</small>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; background: #95e1d3;">🧠</div>
+                            <div style="flex: 1;">
+                                <strong style="display: block; color: #333; margin-bottom: 3px;">LLM Model</strong>
+                                <small style="color: #666; font-size: 0.85em;">LLaMA 13B & Moondream2 for reasoning</small>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; background: #a8e6cf;">📱</div>
+                            <div style="flex: 1;">
+                                <strong style="display: block; color: #333; margin-bottom: 3px;">Output (Device Control)</strong>
+                                <small style="color: #666; font-size: 0.85em;">ADB commands for device interaction</small>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5em; background: #51cf66; color: white;">📊</div>
+                            <div style="flex: 1;">
+                                <strong style="display: block; color: #333; margin-bottom: 3px;">Generated Report & Results</strong>
+                                <small style="color: #666; font-size: 0.85em;">Excel reports with screenshots and verdicts</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <!-- Section 4: System Requirements -->
+            <section class="section" id="requirements">
+                <h2 class="section-title">💻 System Requirements (LLaMA 3.1 13B)</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">📊 Hardware Specifications</h3>
+                    
+                    <table class="specs-table">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Minimum</th>
+                                <th>Recommended</th>
+                                <th>Optimal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="category">CPU</td>
+                                <td>Intel i5-10400 / AMD Ryzen 5 3600<br/>(6 cores, 12 threads)</td>
+                                <td class="highlight">Intel i7-10850H / AMD Ryzen 7 5800H<br/>(6-8 cores, 12-16 threads)</td>
+                                <td class="recommended">Intel i9-12900K / AMD Ryzen 9 5950X<br/>(16+ cores, 32+ threads)</td>
+                            </tr>
+                            <tr>
+                                <td class="category">RAM</td>
+                                <td>16GB DDR4</td>
+                                <td class="highlight">32GB DDR4/DDR5</td>
+                                <td class="recommended">64GB DDR5</td>
+                            </tr>
+                            <tr>
+                                <td class="category">GPU</td>
+                                <td>NVIDIA GTX 1660 Ti (6GB VRAM)<br/>or Intel UHD Graphics (CPU mode)</td>
+                                <td class="highlight">NVIDIA Quadro T1000 (4GB VRAM)<br/>or RTX 3060 (12GB VRAM)</td>
+                                <td class="recommended">NVIDIA RTX 4090 (24GB VRAM)<br/>or A6000 (48GB VRAM)</td>
+                            </tr>
+                            <tr>
+                                <td class="category">Storage</td>
+                                <td>256GB SSD<br/>(50GB free for models)</td>
+                                <td class="highlight">512GB NVMe SSD<br/>(100GB free)</td>
+                                <td class="recommended">1TB+ NVMe Gen4 SSD<br/>(200GB+ free)</td>
+                            </tr>
+                            <tr>
+                                <td class="category">OS</td>
+                                <td colspan="3">Windows 10/11 (64-bit), Ubuntu 20.04+, macOS 12+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">⚡ Performance Expectations</h3>
+                    
+                    <table class="specs-table">
+                        <thead>
+                            <tr>
+                                <th>Configuration</th>
+                                <th>LLaMA Inference</th>
+                                <th>RAG Query</th>
+                                <th>OCR Processing</th>
+                                <th>Total per Step</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="category">CPU Only (16GB RAM)</td>
+                                <td>8-12 seconds</td>
+                                <td>2 seconds</td>
+                                <td>1-2 seconds</td>
+                                <td>~15 seconds</td>
+                            </tr>
+                            <tr>
+                                <td class="category">GPU 4GB VRAM (32GB RAM)</td>
+                                <td>2-3 seconds</td>
+                                <td>0.2 seconds</td>
+                                <td>0.5 seconds</td>
+                                <td class="highlight">~3-4 seconds</td>
+                            </tr>
+                            <tr>
+                                <td class="category">GPU 12GB+ VRAM (64GB RAM)</td>
+                                <td>1-1.5 seconds</td>
+                                <td>0.1 seconds</td>
+                                <td>0.3 seconds</td>
+                                <td class="recommended">~2 seconds</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">💼 Recommended Laptop Models</h3>
+                    
+                    <div class="laptop-cards">
+                        <div class="laptop-card">
+                            <h4>🏆 HP ZBook Fury G9</h4>
+                            <ul>
+                                <li>Intel i7-12800H (14 cores)</li>
+                                <li>32GB DDR5 RAM</li>
+                                <li>NVIDIA RTX A2000 (8GB)</li>
+                                <li>1TB NVMe SSD</li>
+                                <li>Performance: <span class="recommended">Excellent</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="laptop-card">
+                            <h4>💼 Dell Precision 5570</h4>
+                            <ul>
+                                <li>Intel i7-12700H (14 cores)</li>
+                                <li>32GB DDR5 RAM</li>
+                                <li>NVIDIA RTX A1000 (4GB)</li>
+                                <li>512GB NVMe SSD</li>
+                                <li>Performance: <span class="highlight">Very Good</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="laptop-card">
+                            <h4>🎮 Lenovo Legion 5 Pro</h4>
+                            <ul>
+                                <li>AMD Ryzen 7 6800H (8 cores)</li>
+                                <li>32GB DDR5 RAM</li>
+                                <li>NVIDIA RTX 3060 (6GB)</li>
+                                <li>1TB NVMe SSD</li>
+                                <li>Performance: <span class="highlight">Very Good</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="laptop-card">
+                            <h4>🖥️ MSI Creator Z16</h4>
+                            <ul>
+                                <li>Intel i7-12700H (14 cores)</li>
+                                <li>32GB DDR5 RAM</li>
+                                <li>NVIDIA RTX 3060 (6GB)</li>
+                                <li>1TB NVMe SSD</li>
+                                <li>Performance: <span class="highlight">Very Good</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="laptop-card">
+                            <h4>💻 ASUS ProArt Studiobook</h4>
+                            <ul>
+                                <li>Intel i9-12900H (14 cores)</li>
+                                <li>64GB DDR5 RAM</li>
+                                <li>NVIDIA RTX 3070 Ti (8GB)</li>
+                                <li>2TB NVMe SSD</li>
+                                <li>Performance: <span class="recommended">Excellent</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="laptop-card">
+                            <h4>⚡ Razer Blade 15 Studio</h4>
+                            <ul>
+                                <li>Intel i7-12800H (14 cores)</li>
+                                <li>32GB DDR5 RAM</li>
+                                <li>NVIDIA RTX 3070 (8GB)</li>
+                                <li>1TB NVMe SSD</li>
+                                <li>Performance: <span class="recommended">Excellent</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">🖥️ Recommended Desktop Workstations</h3>
+                    
+                    <div class="laptop-cards">
+                        <div class="laptop-card">
+                            <h4>💼 HP Z4 G5</h4>
+                            <ul>
+                                <li>Intel Xeon W-2400 (16 cores)</li>
+                                <li>64GB DDR5 ECC RAM</li>
+                                <li>NVIDIA RTX A4000 (16GB)</li>
+                                <li>2TB NVMe SSD</li>
+                                <li>Performance: <span class="recommended">Exceptional</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="laptop-card">
+                            <h4>🚀 Custom Build (Budget)</h4>
+                            <ul>
+                                <li>AMD Ryzen 7 5800X (8 cores)</li>
+                                <li>32GB DDR4 RAM</li>
+                                <li>NVIDIA RTX 3060 (12GB)</li>
+                                <li>1TB NVMe SSD</li>
+                                <li>Performance: <span class="highlight">Very Good</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="laptop-card">
+                            <h4>🏆 Custom Build (Premium)</h4>
+                            <ul>
+                                <li>AMD Ryzen 9 7950X (16 cores)</li>
+                                <li>128GB DDR5 RAM</li>
+                                <li>NVIDIA RTX 4090 (24GB)</li>
+                                <li>4TB NVMe Gen4 SSD</li>
+                                <li>Performance: <span class="recommended">Outstanding</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">📝 Additional Requirements</h3>
+                    <ul class="goal-list">
+                        <li>
+                            <strong>Network</strong>
+                            Stable internet for downloading models (13GB for LLaMA 13B). Offline execution after initial setup.
+                        </li>
+                        <li>
+                            <strong>USB Ports</strong>
+                            USB 2.0/3.0 for ADB device connection. USB-C with data transfer support preferred.
+                        </li>
+                        <li>
+                            <strong>Display</strong>
+                            1920x1080 minimum resolution. Dual monitor recommended for GUI + device display.
+                        </li>
+                        <li>
+                            <strong>Audio</strong>
+                            Microphone and speakers for voice interface (optional). USB headset recommended.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            
+                <!-- Footer -->
+        <div class="footer">
+            <p><strong>🚀 Neural AI Agent Framework v2.0</strong></p>
+            <p>Scriptless Automotive Testing | RAG + LangChain + LangGraph Enhanced</p>
+            <p>Created by: <strong>Veera Saravanan</strong> | Intern from CIT College</p>
+            <p>
+                <span class="badge">🤖 AI-Powered</span>
+                <span class="badge">🧠 Self-Learning</span>
+                <span class="badge">📝 Codeless Test Cases</span>
+                <span class="badge">💰 Cost Reduction</span>
+            </p>
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.8;">
+                © 2025 | Automotive Test Automation Innovation
+            </p>
+        </div>
+    </div>
+</body>
+</html>
